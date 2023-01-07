@@ -20,8 +20,25 @@ public class GamblingSimulation {
         }
     }
 
+    public static void gambling() {
+        double winningTarget = stake * 1.5;
+        double loosingTarget = stake * 0.5;
+
+        System.out.println("Starting with : " + stake + "    Winning target = " + winningTarget + "    Loosing target = " + loosingTarget);
+
+        while (stake <= winningTarget && stake >= loosingTarget) {
+            checkWinOrLoose();
+            System.out.println("\n");
+
+            if (stake == 150 || stake == 50) {
+                System.out.println("***************************** Target Achieved  *******************************");
+                break;
+            }
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println("Welcome to Gambling Simulation problems");
-        checkWinOrLoose();
+        gambling();
     }
 }
