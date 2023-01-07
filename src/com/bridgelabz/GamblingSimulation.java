@@ -4,19 +4,21 @@ public class GamblingSimulation {
 
     static final int BET = 1;
     static int stake = 100;
+    static int daycount = 1;
+
+    static int total_num_of_wins_in_day = 0;
+    static int total_num_of_losses_in_day = 0;
 
     public static void checkWinOrLoose() {
         int random_Check = (int) (Math.random() * 2);
         switch (random_Check) {
             case 1:
                 stake += BET;
-                System.out.println("Player won the bet.");
-                System.out.print("Player Account balance : " + stake);
+                total_num_of_wins_in_day++;
                 break;
             default:
                 stake -= BET;
-                System.out.println("Player loose the bet.");
-                System.out.print("Player Account balance : " + stake);
+                total_num_of_losses_in_day++;
         }
     }
 
@@ -28,17 +30,35 @@ public class GamblingSimulation {
 
         while (stake <= winningTarget && stake >= loosingTarget) {
             checkWinOrLoose();
-            System.out.println("\n");
-
-            if (stake == 150 || stake == 50) {
-                System.out.println("***************************** Target Achieved  *******************************");
+            if (stake == 150) {
+                System.out.println("*** Winning day ***");
                 break;
             }
+            if (stake == 50) {
+                System.out.println("*** Loosing day ***");
+                break;
+            }
+        }
+        System.out.println("Gambler account balance : " + stake);
+        System.out.println("Total number of wins in the day is : " + total_num_of_wins_in_day);
+        System.out.println("Total number of loose in the day is : " + total_num_of_losses_in_day);
+
+        stake = 100;
+        total_num_of_wins_in_day = 0;
+        total_num_of_losses_in_day = 0;
+    }
+
+    public static void checkAfter20Days() {
+        while (daycount != 21) {
+            System.out.println("******* DAY" + daycount + " *******");
+            gambling();
+            System.out.println("");
+            daycount++;
         }
     }
 
     public static void main(String[] args) {
         System.out.println("Welcome to Gambling Simulation problems");
-        gambling();
+        checkAfter20Days();
     }
 }
