@@ -5,9 +5,13 @@ public class GamblingSimulation {
     static int stake = 100;
     static final int BET = 1;
     static int daycount = 1;
+    static int monthcount = 1;
 
     static int total_num_of_wins_in_day = 0;
     static int total_num_of_losses_in_day = 0;
+
+    static int total_num_of_wins_in_month = 0;
+    static int total_num_of_losses_in_month = 0;
 
     static int winningDaycount = 0;
     static int loosingDaycount = 0;
@@ -18,7 +22,7 @@ public class GamblingSimulation {
     static int unluckiest_day;
 
     static int total_amount_in_hand = 0;
-    static final int total_place_bet_after_month = stake * 30;
+    static int total_place_bet_after_month = 3000;
 
     /* Gambler make 1 bet so either win or loose 1 */
     public static void checkWinOrLoose() {
@@ -27,10 +31,12 @@ public class GamblingSimulation {
             case 1 :
                 stake += BET;
                 total_num_of_wins_in_day++;
+                total_num_of_wins_in_month++;
                 break;
             default :
                 stake -= BET;
                 total_num_of_losses_in_day++;
+                total_num_of_losses_in_month++;
         }
     }
 
@@ -61,11 +67,8 @@ public class GamblingSimulation {
         System.out.println("Gambler account balance : " + stake);
         System.out.println("Total number of wins in the day is : " + total_num_of_wins_in_day);
         System.out.println("Total number of loose in the day is : " + total_num_of_losses_in_day);
-        System.out.println("Total amount present after day" + daycount + " is : " +total_amount_in_hand);
 
-
-
-    //After each days of playing this values will be assigned with the default values. Because on the next day there will be a fresh start
+//After each days of playing this values will be assigned with the default values. Because on the next day there will be a fresh start
         stake = 100;
         total_num_of_wins_in_day = 0;
         total_num_of_losses_in_day = 0;
@@ -88,6 +91,12 @@ public class GamblingSimulation {
 
     /* After 30 days of playing every day would like to know the total amount won or lost. **/
     public static void checkAfterMonth() {
+        total_amount_in_hand = 0;
+        daycount = 1;
+        winningDaycount = 0;
+        loosingDaycount = 0;
+
+        System.out.println("*************************** Month" + monthcount + " is starting ***************************");
         while(daycount != 31) {
             System.out.println("********** DAY" + daycount + " **********");
             gambling();
@@ -95,13 +104,35 @@ public class GamblingSimulation {
             daycount++;
         }
         System.out.println("-----------------------------------------------------");
-        System.out.println("****** After the End of the month ******");
+        System.out.println("****** After the End of the month" + monthcount +" ******");
         System.out.println("Total number of winning days: " + winningDaycount);
         System.out.println("Total number of loosing days: " + loosingDaycount);
         System.out.println("-----------------------------------------------------");
         System.out.println("Luckiest day : " + luckiest_day);
         System.out.println("Un-Luckiest day : " + unluckiest_day);
 
+        monthcount++;
+        checkContinue();
+    }
+
+    /* After a month it will check whether the gambler will continue the to next month or not*/
+    public static void checkContinue() {
+        if (total_amount_in_hand > total_place_bet_after_month) {
+            System.out.println("\nGambler Wins this month.");
+            System.out.println("So the game will continue for the next month.");
+            System.out.println("----------------------------------------------------------------------------------------------------------");
+            System.out.println("----------------------------------------------------------------------------------------------------------\n\n");
+            checkAfterMonth();
+        }else if(total_amount_in_hand == total_place_bet_after_month){
+            System.out.println("\nGambler ended this month with a DRAW(no win no loss) situation.");
+            System.out.println("So the game will continue for the next month.");
+            System.out.println("----------------------------------------------------------------------------------------------------------");
+            System.out.println("----------------------------------------------------------------------------------------------------------\n\n");
+            checkAfterMonth();
+        }else {
+            System.out.println("\nGambler can not win this month.");
+            System.out.println("So the game will not continue.");
+        }
     }
 
     public static void main(String[] args) {
