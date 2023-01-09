@@ -2,8 +2,8 @@ package com.bridgelabz;
 
 public class GamblingSimulation {
 
-    static final int BET = 1;
     static int stake = 100;
+    static final int BET = 1;
     static int daycount = 1;
 
     static int total_num_of_wins_in_day = 0;
@@ -12,15 +12,23 @@ public class GamblingSimulation {
     static int winningDaycount = 0;
     static int loosingDaycount = 0;
 
+    static int previous_day_win = 0;
+    static int previous_day_loss = 0;
+    static int luckiest_day;
+    static int unluckiest_day;
+
+    static int total_amount_in_hand = 0;
+    static final int total_place_bet_after_month = stake * 30;
+
     /* Gambler make 1 bet so either win or loose 1 */
     public static void checkWinOrLoose() {
-        int random_Check = (int) (Math.random() * 2);
-        switch (random_Check) {
-            case 1:
+        int random_Check = (int) (Math.random()*2);
+        switch(random_Check) {
+            case 1 :
                 stake += BET;
                 total_num_of_wins_in_day++;
                 break;
-            default:
+            default :
                 stake -= BET;
                 total_num_of_losses_in_day++;
         }
@@ -33,22 +41,29 @@ public class GamblingSimulation {
 
         System.out.println("Starting with : " + stake + "    Winning target = " + winningTarget + "    Loosing target = " + loosingTarget);
 
-        while (stake <= winningTarget && stake >= loosingTarget) {
+        while(stake <= winningTarget && stake >= loosingTarget) {
             checkWinOrLoose();
-            if (stake == 150) {
+            if(stake == 150) {
                 winningDaycount++;
                 System.out.println("*** Winning day ***");
+                checkLuckyday();
+                total_amount_in_hand += stake;
                 break;
             }
-            if (stake == 50) {
+            if(stake == 50) {
                 loosingDaycount++;
                 System.out.println("*** Loosing day ***");
+                checkUnluckyday();
+                total_amount_in_hand += stake;
                 break;
             }
         }
         System.out.println("Gambler account balance : " + stake);
         System.out.println("Total number of wins in the day is : " + total_num_of_wins_in_day);
         System.out.println("Total number of loose in the day is : " + total_num_of_losses_in_day);
+        System.out.println("Total amount present after day" + daycount + " is : " +total_amount_in_hand);
+
+
 
     //After each days of playing this values will be assigned with the default values. Because on the next day there will be a fresh start
         stake = 100;
@@ -56,18 +71,37 @@ public class GamblingSimulation {
         total_num_of_losses_in_day = 0;
     }
 
-    /* After 30 days of playing every day would like to know the total amount won or lost. */
+    /* Check the day where I won maximum times(luckiest) and the day where I lost maximum times(unluckiest). */
+
+    public static void checkLuckyday() {
+        if(previous_day_win < total_num_of_wins_in_day) {
+            previous_day_win = total_num_of_wins_in_day;
+            luckiest_day = daycount;
+        }
+    }
+    public static void checkUnluckyday() {
+        if(previous_day_loss < total_num_of_losses_in_day) {
+            previous_day_loss = total_num_of_losses_in_day;
+            unluckiest_day = daycount;
+        }
+    }
+
+    /* After 30 days of playing every day would like to know the total amount won or lost. **/
     public static void checkAfterMonth() {
-        while (daycount != 31) {
+        while(daycount != 31) {
             System.out.println("********** DAY" + daycount + " **********");
             gambling();
             System.out.println("");
             daycount++;
         }
         System.out.println("-----------------------------------------------------");
-        System.out.println("Gambler total number of wins in a month :- " + winningDaycount);
-        System.out.println("Gambler total number of looses in a month :- " + loosingDaycount);
+        System.out.println("****** After the End of the month ******");
+        System.out.println("Total number of winning days: " + winningDaycount);
+        System.out.println("Total number of loosing days: " + loosingDaycount);
         System.out.println("-----------------------------------------------------");
+        System.out.println("Luckiest day : " + luckiest_day);
+        System.out.println("Un-Luckiest day : " + unluckiest_day);
+
     }
 
     public static void main(String[] args) {
